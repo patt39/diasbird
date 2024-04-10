@@ -74,25 +74,28 @@ export class EggHavestingsService {
       select: EggHarvestingsSelect,
     });
 
-    // const weaning = await this.client.weaning.findUnique({
-    //   select: WeaningSelect,
-    //   where: {
-    //     id: weaningId,
-    //   },
-    // });
-
     return eggHavesting;
   }
 
   /** Create one egg-havesting in database. */
   async createOne(options: CreateEggHavestingsOptions): Promise<EggHavesting> {
-    const { note, date, quantity, batchId, organizationId, userCreatedId } =
-      options;
+    const {
+      note,
+      date,
+      size,
+      method,
+      quantity,
+      batchId,
+      organizationId,
+      userCreatedId,
+    } = options;
 
     const egghavesting = this.client.eggHavesting.create({
       data: {
         note,
         date,
+        size,
+        method,
         quantity,
         batchId,
         organizationId,
@@ -109,8 +112,16 @@ export class EggHavestingsService {
     options: UpdateEggHavestingsOptions,
   ): Promise<EggHavesting> {
     const { eggHavestingId } = selections;
-    const { note, date, quantity, organizationId, userCreatedId, batchId } =
-      options;
+    const {
+      note,
+      date,
+      size,
+      method,
+      quantity,
+      organizationId,
+      userCreatedId,
+      batchId,
+    } = options;
 
     const eggHavesting = this.client.eggHavesting.update({
       where: {
@@ -119,6 +130,8 @@ export class EggHavestingsService {
       data: {
         note,
         date,
+        size,
+        method,
         quantity,
         batchId,
         organizationId,

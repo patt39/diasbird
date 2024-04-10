@@ -1,13 +1,11 @@
 import { config } from '../../../app/config/index';
 import { sendEmail } from '../../integrations/email.service';
 
-export const emailPDFAttachment = async (options: {
+export const contactNotification = async (options: {
   email: string;
-  filename: string;
-  content: any;
   user: any;
 }) => {
-  const { email, filename, content, user } = options;
+  const { email, user } = options;
   const output = `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html xmlns="http://www.w3.org/1999/xhtml">
@@ -200,24 +198,12 @@ export const emailPDFAttachment = async (options: {
                         color: #0d0c22;
                         font-family: Helvetica Neue Roman, Arial, sans-serif,
                           'Open Sans';
-                      ">Sale confirmation</h2>
+                      ">Contact Notification</h2>
 
                       <div style="text-align: center">
-                        <span style="font-size: 16px">
-                            ${user.profile.firstName} ${user.profile.lastName} has sent you an attachment with your billing details </span
+                        <span style="font-size: 16px"> You recieved a contact message from ${user.profile.firstName} ${user.profile.lastName} </span
                           >
                       </div><br />
-  
-                        <table
-                          class="subcopy"
-                          width="100%"
-                          cellpadding="0"
-                          cellspacing="0"
-                          role="presentation"
-                        >
-                        </table>
-                        <br /><br />
-  
                         <p
                           style="
                             box-sizing: border-box;
@@ -234,6 +220,43 @@ export const emailPDFAttachment = async (options: {
                         >
                           Thanks,<br />The ${config.datasite.name} Team
                         </p>
+  
+                        <table
+                          class="subcopy"
+                          width="100%"
+                          cellpadding="0"
+                          cellspacing="0"
+                          role="presentation"
+                          style="
+                            box-sizing: border-box;
+                            font-family: -apple-system, BlinkMacSystemFont,
+                              'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+                              'Apple Color Emoji', 'Segoe UI Emoji',
+                              'Segoe UI Symbol';
+                            position: relative;
+                            border-top: 1px solid #e8e5ef;
+                            margin-top: 25px;
+                            padding-top: 25px;
+                          "
+                        >
+                          <tr>
+                            <td
+                              style="
+                                box-sizing: border-box;
+                                font-family: -apple-system, BlinkMacSystemFont,
+                                  'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+                                  'Apple Color Emoji', 'Segoe UI Emoji',
+                                  'Segoe UI Symbol';
+                                position: relative;
+                              "
+                            >
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
                 </td>
               </tr>
   
@@ -349,8 +372,7 @@ export const emailPDFAttachment = async (options: {
       `;
   await sendEmail({
     to: [email],
-    subject: `${config.datasite.name} - Sale pdf attachment`,
+    subject: `${config.datasite.name} - Contact notification`,
     html: output,
-    attachments: [{ filename, content }],
   });
 };
