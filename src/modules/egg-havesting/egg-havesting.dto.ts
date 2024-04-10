@@ -1,4 +1,6 @@
+import { PickingMethod, Size } from '@prisma/client';
 import {
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -14,6 +16,16 @@ export class CreateOrUpdateEggHavestingsDto {
   @IsOptional()
   @IsString()
   note: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsEnum(Size)
+  size: Size;
+
+  @IsOptional()
+  @IsString()
+  @IsEnum(PickingMethod)
+  method: PickingMethod;
 
   @IsNotEmpty()
   @IsString()

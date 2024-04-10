@@ -79,28 +79,29 @@ model Profile {
 }
 
 model Organization {
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  deletedAt    DateTime?
-  id           String         @id @default(uuid())
-  name         String?
-  image        String?
-  logo         String?
-  description  String?        @db.Text
-  userId       String         @unique
-  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  contributors Contributor[]
-  tasks        Task[]
-  treatments   Treatment[]
-  deaths       Death[]
-  feedings     Feeding[]
-  sellings     Sale[]
-  finances     Finance[]
-  locations    Location[]
-  assignTasks  AssignTask[]
-  batch        Batch[]
-  eggHavesting EggHavesting[]
-  incubation   Incubation[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  deletedAt     DateTime?
+  id            String         @id @default(uuid())
+  name          String?
+  image         String?
+  logo          String?
+  description   String?        @db.Text
+  userId        String         @unique
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contributors  Contributor[]
+  tasks         Task[]
+  treatments    Treatment[]
+  deaths        Death[]
+  feedings      Feeding[]
+  sellings      Sale[]
+  finances      Finance[]
+  locations     Location[]
+  assignTasks   AssignTask[]
+  batchs        Batch[]
+  eggHavestings EggHavesting[]
+  incubations   Incubation[]
+  contacts      Contact[]
 }
 
 model ContactUs {
@@ -172,13 +173,12 @@ model Location {
   id             String       @id @default(uuid())
   manger         Int
   through        Int
-  number         Int
-  type           BirdType
+  code           String
   squareMeter    Int
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   userCreatedId  String
-  batch          Batch[]
+  batchs         Batch[]
 }
 
 model Batch {
@@ -188,18 +188,19 @@ model Batch {
   id             String         @id @default(uuid())
   quantity       Int
   weight         Int
+  code           String
   type           BirdType
   locationId     String
   location       Location       @relation(fields: [locationId], references: [id], onDelete: Cascade)
   organizationId String
   organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   userCreatedId  String
-  eggHavesting   EggHavesting[]
-  incubation     Incubation[]
-  sale           Sale[]
-  feeding        Feeding[]
-  death          Death[]
-  treatment      Treatment[]
+  eggHavestings  EggHavesting[]
+  incubations    Incubation[]
+  sales          Sale[]
+  feedings       Feeding[]
+  deaths         Death[]
+  treatments     Treatment[]
 }
 
 enum BirdType {
@@ -208,6 +209,8 @@ enum BirdType {
   TURKEYS
   DUCKS
   QUAILS
+  BRAHMAS
+  GOLIATHS
 }
 
 model Treatment {
@@ -324,12 +327,12 @@ model Sale {
 }
 
 enum sellingMethod {
-  SOCIALMEDIA
   MARKET
   INFARM
   AUCTION
   CONTRACT
   OTHER
+  SOCIALMEDIA
 }
 
 model Finance {
@@ -354,19 +357,31 @@ enum financeType {
 }
 
 model EggHavesting {
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
   deletedAt      DateTime?
-  id             String       @id @default(uuid())
+  id             String         @id @default(uuid())
   date           DateTime?
-  note           String?      @db.Text
+  note           String?        @db.Text
   quantity       Int?
-  size           Int?
+  size           Size?
+  method         PickingMethod?
   batchId        String
-  batch          Batch        @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  batch          Batch          @relation(fields: [batchId], references: [id], onDelete: Cascade)
   organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   userCreatedId  String
+}
+
+enum Size {
+  BIG
+  SMALL
+  MEDIUM
+}
+
+enum PickingMethod {
+  HAND
+  MACHINE
 }
 
 model Incubation {
@@ -383,4 +398,16 @@ model Incubation {
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   userCreatedId  String
+}
+
+model Contact {
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  id             String       @id @default(uuid())
+  subject        String?
+  description    String?      @db.Text
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userCreatedId  String?
 }

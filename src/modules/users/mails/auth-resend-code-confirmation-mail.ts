@@ -1,5 +1,5 @@
 import { config } from '../../../app/config/index';
-import { sendEmail } from '../email.service';
+import { sendEmail } from '../../integrations/email.service';
 
 export const authCodeConfirmationMail = async (options: {
   email: string;
